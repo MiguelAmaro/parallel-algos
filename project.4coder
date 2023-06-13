@@ -4,6 +4,7 @@ project_name =  "Parallel Algos";
 
 patterns = {
   "*.c",
+  "*.cu",
   "*.hpp",
   "*.h",
   "*.hlsl",

@@ -5,23 +5,12 @@
 #include "mycuda.h"
 #include "windows.h"
 #include "common.h"
+#include "bricksorter.h"
 
 // we should have runs to help us know weather odds should look left or right
 // pairs are constructed and are sorted independently by their threads. there needs to be a way for threads to pick up new pairs
 // 
-typedef struct brick_sorter brick_sorter;
-struct brick_sorter
-{
-  uint64_t  BeginSignal;
-  uint64_t *ThreadHandles;
-  uint64_t  ThreadCount;
-  uint32_t *Data;
-  uint32_t  Count;
-  volatile uint64_t  ShouldSort;
-  volatile uint64_t  SwapOccurred;
-  volatile uint64_t  RunId;
-  volatile uint64_t  NextPairIndex;
-};
+
 void SwapUint32(uint32_t *a, uint32_t *b)
 {
   uint32_t t = *a;
@@ -163,7 +152,7 @@ int main(void)
   //PARALLEL - GPU
   printf("parallel gpu c\n");
   BeginTick = TimerGetTick();
-  CudaRunCodeFromC();
+  BrickSortCuda(&Sorter);
   EndTick = TimerGetTick();
   printf("seconds elapsed: %fs\n", TimerGetSecondsElepsed(BeginTick, EndTick));
   
