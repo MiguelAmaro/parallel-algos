@@ -86,6 +86,15 @@ void BrickSortSerial(brick_sorter *BrickSorter)
   }
   return;
 }
+void BrickSorterScrambleArray(brick_sorter *BrickSorter)
+{
+  for(uint32_t i=0;i<BrickSorter->Count;i++)
+  {
+    uint32_t RandIdx = BrickSorter->Count*((float)rand()/(float)RAND_MAX);
+    SwapUint32(&BrickSorter->Data[i], &BrickSorter->Data[RandIdx]);
+  }
+  return;
+}
 void BrickSorterInit(brick_sorter *BrickSorter, uint64_t ArrayCount)
 {
   //only 32 bit integers
@@ -98,6 +107,11 @@ void BrickSorterInit(brick_sorter *BrickSorter, uint64_t ArrayCount)
   BrickSorter->RunId = 0;
   BrickSorter->ShouldSort = 1;
   BrickSorter->NextPairIndex = 1; //first odd number
+  //Initailize
+  for(uint32_t i=0;i<BrickSorter->Count;i++)
+  {
+    BrickSorter->Data[i] = i;
+  }
   //Launch Threads - keep them ready
   uint64_t ThreadCount = BrickSorter->ThreadCount;
   for(uint32_t ThreadIdx=0; ThreadIdx<ThreadCount; ThreadIdx++)
@@ -108,11 +122,12 @@ void BrickSorterInit(brick_sorter *BrickSorter, uint64_t ArrayCount)
   }
   return;
 }
-void BrickSorterPrintArray(brick_sorter *BrickSorter)
+void BrickSorterPrintArray(brick_sorter *BrickSorter, uint32_t ColumnCount)
 {
   printf("[");
   for(uint32_t i=0;i<BrickSorter->Count;i++)
   {
+    if(i%(ColumnCount)==0 && i != 0) printf("\n");
     printf("%d%s", BrickSorter->Data[i], i==BrickSorter->Count-1?"]\n":", ");
   }
   return;
@@ -125,36 +140,48 @@ int main(void)
   uint64_t EndTick   = 0;
   
   brick_sorter Sorter = {0};
-  BrickSorterInit(&Sorter, 4);
-  Sorter.Data[0] = 3;
-  Sorter.Data[1] = 2;
-  Sorter.Data[2] = 1;
-  Sorter.Data[3] = 0;
-  BrickSorterPrintArray(&Sorter);
+  BrickSorterInit(&Sorter, 100);
+  BrickSorterScrambleArray(&Sorter);
+  printf("\n\n");
   
   //SERIAL - CPU
   printf("serial cpu c\n");
-  BeginTick = TimerGetTick();
-  //BrickSortSerial(&Sorter);
-  EndTick = TimerGetTick();
+  BrickSorterPrintArray(&Sorter, 10);
+  {
+    BeginTick = TimerGetTick();
+    BrickSortSerial(&Sorter);
+    EndTick = TimerGetTick();
+  }
   printf("seconds elapsed: %fs\n", TimerGetSecondsElepsed(BeginTick, EndTick));
-  BrickSorterPrintArray(&Sorter);
+  BrickSorterPrintArray(&Sorter, 10);
+  BrickSorterScrambleArray(&Sorter);
+  printf("\n\n");
   
   //PARALLEL - CPU
   printf("parallel cpu c\n");
-  BeginTick = TimerGetTick();
-  BrickSortParallel(&Sorter);
-  EndTick = TimerGetTick();
+  BrickSorterPrintArray(&Sorter, 10);
+  {
+    BeginTick = TimerGetTick();
+    BrickSortParallel(&Sorter);
+    EndTick = TimerGetTick();
+  }
   printf("seconds elapsed: %fs\n", TimerGetSecondsElepsed(BeginTick, EndTick));
-  BrickSorterPrintArray(&Sorter);
-  printf("\n\n\n\n");
+  BrickSorterPrintArray(&Sorter, 10);
+  BrickSorterScrambleArray(&Sorter);
+  printf("\n\n");
   
   //PARALLEL - GPU
   printf("parallel gpu c\n");
-  BeginTick = TimerGetTick();
-  BrickSortCuda(&Sorter);
-  EndTick = TimerGetTick();
+  BrickSorterPrintArray(&Sorter, 10);
+  {
+    BeginTick = TimerGetTick();
+    BrickSortCuda(&Sorter);
+    EndTick = TimerGetTick();
+  }
   printf("seconds elapsed: %fs\n", TimerGetSecondsElepsed(BeginTick, EndTick));
+  BrickSorterPrintArray(&Sorter, 10);
+  BrickSorterScrambleArray(&Sorter);
+  printf("\n\n");
   
   //END
   printf("done\n");
