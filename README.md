@@ -1,5 +1,11 @@
 # ReadMe
 
+A project to get familiar with writing parallel allgorithrms.
+
+パラレルアルゴリズムに馴染むようになるプロジェクト。
+
+[Intro to Parallel Programming - YouTube](https://youtube.com/playlist?list=PLAwxTw4SYaPnFKojVQrmyOGFCqHTxfdv2 "https://youtube.com/playlist?list=PLAwxTw4SYaPnFKojVQrmyOGFCqHTxfdv2")
+
 Current Output
 
 ```batch

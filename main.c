@@ -6,6 +6,7 @@
 #include "windows.h"
 #include "common.h"
 #include "bricksorter.h"
+#include "linear_reg.h"
 
 // we should have runs to help us know weather odds should look left or right
 // pairs are constructed and are sorted independently by their threads. there needs to be a way for threads to pick up new pairs
@@ -143,7 +144,7 @@ int main(void)
   BrickSorterInit(&Sorter, 100);
   BrickSorterScrambleArray(&Sorter);
   printf("\n\n");
-  
+#if 0
   //SERIAL - CPU
   printf("serial cpu c\n");
   BrickSorterPrintArray(&Sorter, 10);
@@ -182,6 +183,9 @@ int main(void)
   BrickSorterPrintArray(&Sorter, 10);
   BrickSorterScrambleArray(&Sorter);
   printf("\n\n");
+#endif
+  
+  SLRRun();
   
   //END
   printf("done\n");

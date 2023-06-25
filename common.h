@@ -1,8 +1,17 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#define Min(a, b) ((a)<(b)?(a):(b))
+#define Assert(cond) while(!cond) { __debugbreak(); }
+#define Bytes(x) (x)
+#define Kilobytes(x) (1024*x)
+#define Megabytes(x) (1024*Kilobytes(x))
+#define Gigabytes(x) (1024*Megabytes(x))
+#define ArrayCount(array) (sizeof(array)/sizeof(array[0]))
+#define Min(a, b) ((a)<(b)?(a):(b)) 
 #define Max(a, b) ((a)>(b)?(a):(b))
+#include <float.h>
+#define F64Max DBL_MAX
+#define F64Min DBL_MIN
 
 int GetLogicalCoreCount(void)
 {
@@ -14,6 +23,11 @@ int GetLogicalCoreCount(void)
   GetLogicalProcessorInformationEx(RelationProcessorPackage, &ProcessorInfo, &Length);
   uint32_t Result = SystemInfo.dwNumberOfProcessors;
   return Result;
+}
+void KillProcess(void)
+{
+  ExitProcess(1);
+  return;
 }
 //~Timer
 typedef struct timer timer;
@@ -97,4 +111,55 @@ void *MemAlloc(uint64_t Size)
   void *Ptr = VirtualAlloc(0, Size, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
   return Ptr;
 }
+void MemFree(void *Ptr)
+{
+  VirtualFree(Ptr, 0, MEM_RELEASE);
+  return;
+}
+typedef struct arena arena;
+struct arena
+{
+  void     *Base;
+  uint64_t  Offset;
+  uint64_t  Capacity;
+};
+arena ArenaInit(uint64_t *Memory, uint64_t Capacity)
+{
+  arena Result = { .Base = Memory, .Capacity = Capacity, .Offset = 0 };
+  return Result;
+}
+arena ArenaAlloc(uint64_t Capacity)
+{
+  arena Result = ArenaInit(MemAlloc(Capacity), Capacity);
+  return Result;
+}
+void ArenaFree(arena *Arena)
+{
+  MemFree(Arena->Base);
+  return;
+}
+void *ArenaPushBlock(arena *Arena, uint64_t Size)
+{
+  void *Result = NULL;
+  uint64_t Start = (uint64_t)Arena->Base;
+  uint64_t End   = Start + Arena->Capacity;
+  if((Start + Arena->Offset + Size)<End)
+  {
+    Result = (void *)(Start + Arena->Offset);
+    Arena->Offset += Size;
+  }
+  else
+  {
+    printf("arena capacity is too small for resquested allocation");
+    Assert("Invalid Codepath");
+  }
+  return Result;
+}
+
+#define ArenaPushArray(arena_ptr, count, type) ArenaPushBlock(arena_ptr, count*sizeof(type))
+#define ArenaPushType(arena_ptr, type) ArenaPushBlock(arena_ptr, sizeof(type))
+
+//~Other
+
+
 #endif //COMMON_H
