@@ -32,7 +32,13 @@ int32_t SLRSampleArea[] =
   1,2,9,4
 };
 #endif
-#include <math.h>
+
+#ifdef __cplusplus
+extern "C" void SLRDeviationCuda(double Mean, double *Data, uint64_t Count, double *Result);
+#else
+void SLRDeviationCuda(double Mean, double *Data, uint64_t Count, double *Result);
+#endif
+
 //~ SINGLE LINEAR REGRESSON
 typedef struct slr slr;
 struct slr { arena Arena; };
@@ -62,6 +68,200 @@ double SLRAverage(int32_t *Data, uint32_t Count)
   double Result = (double)Sum/(double)Count;
   return Result;
 }
+double SLRAverageF64(double *Data, uint64_t Count)
+{
+  double Sum = 0.0;
+  for(uint64_t i=0;i<Count;i++)
+  {
+    Sum += Data[i];
+  }
+  double Result = (double)Sum/(double)Count;
+  return Result;
+}
+void SLRDeviationF64(double Mean, double *Data, uint64_t Count, double *Result, uint32_t UseCuda)
+{
+  if(UseCuda)
+  {
+    SLRDeviationCuda(Mean, Data, Count, Result);
+  }
+  else
+  {
+    double Sum = 0.0;
+    for(uint64_t i=0;i<Count;i++)
+    {
+#if 0
+      Result[i] = Data[i]-Mean;
+#else
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+      Result[i] += Data[i]-Mean;
+#endif
+    }
+  }
+  return;
+}
+double SLRVarianceF64(double *Data, uint32_t Count)
+{
+  double Sum = 0.0;
+  double Mean = SLRAverageF64(Data, Count);
+  for(int i=0;i<Count;i++)
+  {
+    double Delta = Data[i]-Mean;
+    Sum += Delta*Delta;
+  }
+  double Result = (double)Sum/(double)(Count-1.0);
+  return Result;
+}
+double SLRStandardDiviationF64(double *Data, uint32_t Count)
+{
+  double Result = SquareRoot(SLRVarianceF64(Data, Count));
+  return Result;
+}
 i64 SLRDataSetRange(int32_t *Data, uint32_t Count)
 {
   i64 Result = {.min=F64Max, .max=F64Min};
@@ -76,6 +276,15 @@ double *SLRGetZScoreNormalizedCopy(int32_t *Data, uint32_t Count)
 {
   Assert(!"Not Implemented");
   return NULL;
+}
+double *SLRGetF64Copy(int32_t *Data, uint32_t Count)
+{
+  double *Result = ArenaPushArray(&GlobalSLR.Arena, Count, double);
+  for(int i=0;i<Count;i++)
+  {
+    Result[i] = (double)(Data[i]);
+  }
+  return Result;
 }
 double *SLRGetMeanNormalizedCopy(int32_t *Data, uint32_t Count)
 {
@@ -153,7 +362,12 @@ void SLRRun(void)
   double lr = 0.00000002941;
   uint32_t BatchCount = Min(ArrayCount(SLRSampleArea), ArrayCount(SLRSamplePrices));
   double *MeanNormArea = SLRGetMeanNormalizedCopy(SLRSampleArea, BatchCount);
+  double *FCopy = SLRGetF64Copy(SLRSampleArea, BatchCount);
+  printf("mean: %f\n", SLRAverageF64(FCopy, BatchCount));
+  printf("variance: %f\n", SLRVarianceF64(FCopy, BatchCount));
+  printf("std deviation: %f\n", SLRStandardDiviationF64(FCopy, BatchCount));
   printf("avg: %f\n", SLRAverage(SLRSampleArea, BatchCount));
+  //KillProcess();
   for(int i=0;i<BatchCount; i++)
   {
     printf("%f : %d\n", MeanNormArea[i], SLRSampleArea[i]);

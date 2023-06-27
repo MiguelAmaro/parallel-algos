@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <math.h>
 
 #include "mycuda.h"
 #include "windows.h"
@@ -96,6 +97,17 @@ void BrickSorterScrambleArray(brick_sorter *BrickSorter)
   }
   return;
 }
+void RandomInitF64(double *Data, uint64_t Count, double min, double max)
+{
+  double Range = max-min;
+  for(uint64_t i=0;i<Count;i++)
+  {
+    double t = (double)rand()/(double)RAND_MAX;
+    Data[i] = t*Range+min;
+  }
+  
+  return;
+}
 void BrickSorterInit(brick_sorter *BrickSorter, uint64_t ArrayCount)
 {
   //only 32 bit integers
@@ -185,7 +197,39 @@ int main(void)
   printf("\n\n");
 #endif
   
-  SLRRun();
+  //SLRRun();
+  uint64_t MemSize = Megabytes(2);
+  printf("%lld gb\n", MemSize);
+  double  *DataSet = MemAlloc(MemSize);
+  double  *Result  = MemAlloc(MemSize);
+  uint64_t DataSetCount = MemSize/sizeof(double);
+  uint64_t ResultCount  = MemSize/sizeof(double);
+  RandomInitF64(DataSet, DataSetCount, -1, 1.0);
+  
+  double BestTime = F64Max;
+  uint64_t TrialCount = 20;
+  double Mean = SLRAverageF64(DataSet, DataSetCount);
+  for(int i=0;i<TrialCount;i++)
+  {
+    BeginTick = TimerGetTick();
+    SLRDeviationF64(Mean, DataSet, DataSetCount, Result, 0);
+    EndTick = TimerGetTick();
+    BestTime = Min(BestTime, TimerGetSecondsElepsed(BeginTick, EndTick));
+    printf("mean %f | time: %f\n", Mean, BestTime);
+  }
+  printf("seconds elapsed: %fs\n", BestTime);
+  BestTime = F64Max;
+  for(int i=0;i<TrialCount;i++)
+  {
+    BeginTick = TimerGetTick();
+    SLRDeviationF64(Mean, DataSet, DataSetCount, Result, 1);
+    EndTick = TimerGetTick();
+    BestTime = Min(BestTime, TimerGetSecondsElepsed(BeginTick, EndTick));
+    printf("mean %f | time: %f\n", Mean, BestTime);
+  }
+  printf("seconds elapsed: %fs\n", BestTime);
+  
+  //for(int i=0; i<DataSetCount; i++) { printf("val: %f\n", DataSet[i]); }
   
   //END
   printf("done\n");

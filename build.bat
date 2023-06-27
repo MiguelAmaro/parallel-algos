@@ -1,6 +1,7 @@
 @echo off
 
 set DEBUG=-Zi -Od
+set CUDA_DEBUG=-O 0 -g -G
 set LIBS="C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\lib\x64\cuda.lib" "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\lib\x64\cudart.lib"
-rem nvcc -c -o cuda cuda.cu
+nvcc -c -o cuda cuda.cu
 cl -nologo %DEBUG% main.c -link %LIBS% cuda.obj

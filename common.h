@@ -2,10 +2,10 @@
 #define COMMON_H
 
 #define Assert(cond) while(!cond) { __debugbreak(); }
-#define Bytes(x) (x)
-#define Kilobytes(x) (1024*x)
-#define Megabytes(x) (1024*Kilobytes(x))
-#define Gigabytes(x) (1024*Megabytes(x))
+#define Bytes(x) (1llu*x)
+#define Kilobytes(x) (1024llu*Bytes(x))
+#define Megabytes(x) (1024llu*Kilobytes(x))
+#define Gigabytes(x) (1024llu*Megabytes(x))
 #define ArrayCount(array) (sizeof(array)/sizeof(array[0]))
 #define Min(a, b) ((a)<(b)?(a):(b)) 
 #define Max(a, b) ((a)>(b)?(a):(b))
@@ -158,6 +158,13 @@ void *ArenaPushBlock(arena *Arena, uint64_t Size)
 
 #define ArenaPushArray(arena_ptr, count, type) ArenaPushBlock(arena_ptr, count*sizeof(type))
 #define ArenaPushType(arena_ptr, type) ArenaPushBlock(arena_ptr, sizeof(type))
+
+//~Math
+double SquareRoot(double x)
+{
+  double r = sqrt(x);
+  return r;
+}
 
 //~Other
 
