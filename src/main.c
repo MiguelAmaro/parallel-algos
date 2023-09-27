@@ -4,9 +4,10 @@
 #include <math.h>
 
 #include "mycuda.h"
-#include "windows.h"
 #include "common.h"
+#include "debug.h"
 #include "bricksorter.h"
+#include "csv.h"
 #include "linear_reg.h"
 
 // we should have runs to help us know weather odds should look left or right
@@ -152,6 +153,9 @@ int main(void)
   uint64_t BeginTick = 0;
   uint64_t EndTick   = 0;
   
+  int8_t twoscomppos127 = -82;
+  
+  
   brick_sorter Sorter = {0};
   BrickSorterInit(&Sorter, 100);
   BrickSorterScrambleArray(&Sorter);
@@ -197,7 +201,9 @@ int main(void)
   printf("\n\n");
 #endif
   
-  //SLRRun();
+  SLRRun();
+  
+#if 0
   uint64_t MemSize = Megabytes(2);
   printf("%lld gb\n", MemSize);
   double  *DataSet = MemAlloc(MemSize);
@@ -228,7 +234,7 @@ int main(void)
     printf("mean %f | time: %f\n", Mean, BestTime);
   }
   printf("seconds elapsed: %fs\n", BestTime);
-  
+#endif
   //for(int i=0; i<DataSetCount; i++) { printf("val: %f\n", DataSet[i]); }
   
   //END

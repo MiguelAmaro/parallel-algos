@@ -1,6 +1,11 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <stdio.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <wincrypt.h>
+
 #define Assert(cond) while(!cond) { __debugbreak(); }
 #define Bytes(x) (1llu*x)
 #define Kilobytes(x) (1024llu*Bytes(x))
@@ -108,6 +113,7 @@ uint64_t LockedSetAndGetLastValue(uint64_t volatile *Target, uint64_t Value)
 //~Memory
 void *MemAlloc(uint64_t Size)
 {
+  //we get commit and entire 4k page
   void *Ptr = VirtualAlloc(0, Size, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
   return Ptr;
 }
@@ -150,6 +156,7 @@ void *ArenaPushBlock(arena *Arena, uint64_t Size)
   }
   else
   {
+    
     printf("arena capacity is too small for resquested allocation");
     Assert("Invalid Codepath");
   }
@@ -166,7 +173,121 @@ double SquareRoot(double x)
   return r;
 }
 
+//~File
+typedef struct s8 s8;
+struct s8 { uint8_t *Data; uint64_t Length; };
+
+uint64_t FileGetSize(HANDLE File)
+{
+  LARGE_INTEGER Whatever = { 0 };
+  uint64_t Result = 0;
+  uint32_t Status = GetFileSizeEx(File, &Whatever);
+  Result = Whatever.QuadPart;
+  Assert(Status != 0);
+  return Result;
+}
+s8 FileReadAll(const char *Path, arena *Arena)
+{
+  s8 Result = {0};
+  HANDLE File = CreateFileA((LPCSTR)Path, GENERIC_READ, FILE_SHARE_READ,
+                            0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+  if(File)
+  {
+    uint64_t ExpectedSize = FileGetSize(File);
+    uint64_t BytesRead    = 0;
+    Result = (s8){ArenaPushArray(Arena, ExpectedSize, uint8_t), ExpectedSize};
+    ReadFile(File, Result.Data, (uint32_t)ExpectedSize, (LPDWORD)&BytesRead, NULL);
+    Assert(BytesRead == ExpectedSize);
+    Result.Length = BytesRead;
+    CloseHandle(File);
+  }
+  return Result;
+}
+s8 FileWrite(const char *Path, uint8_t *Buffer, uint64_t Size)
+{
+  s8 Result = {0};
+  HANDLE File = CreateFileA((LPCSTR)Path, GENERIC_WRITE, FILE_SHARE_READ,
+                            0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+  if(File)
+  {
+    uint32_t ByteCountWriten = 0;
+    WriteFile(File, Buffer, Size, (LPDWORD)&ByteCountWriten, NULL);
+  }else { printf("error"); }
+  return Result;
+}
+
 //~Other
+void ConvertStrToValue(const char *String, const char *Format, ...)
+{
+  va_list ArgList;
+  va_start(ArgList, Format);
+  vsscanf(String, Format, ArgList);
+  va_end(ArgList);
+  return;
+}
+void MemoryCopy(void *Dst, const void *Src, uint64_t ByteCount)
+{
+  memcpy(Dst, Src, ByteCount);
+  return;
+}
+void MemoryClear(void *Src, uint64_t ByteCount)
+{
+  memset(Src, 0, ByteCount);
+  return;
+}
+//~Random
+void EntropyGen(void *Data, uint64_t Size)
+{
+  HCRYPTPROV Provider = 0;
+  CryptAcquireContextA(&Provider, 0, 0, 0, CRYPT_VERIFYCONTEXT);
+  CryptGenRandom(Provider, (uint32_t)Size, (BYTE *)&Data);
+  CryptReleaseContext(Provider, 0);
+  return;
+}
+#include "pcg64.h"
+pcg64 GlobalRNG = {0};
 
-
+void RandInit(void)
+{
+  //sets seed generator seed
+  uint64_t ResultA = 0;
+  uint64_t ResultB = 0;
+  EntropyGen(&ResultA, sizeof(uint64_t));
+  EntropyGen(&ResultB, sizeof(uint64_t));
+  pcg64_seed(&GlobalRNG, ResultA, ResultB);
+  return;
+}
+uint64_t RandRangeU64(uint64_t Low, uint64_t High)
+{
+  uint64_t r = pcg64_range(&GlobalRNG, Low, High);
+  return r;
+}
+uint32_t RandRangeU32(uint32_t Low, uint32_t High)
+{
+  uint32_t r = (uint32_t)pcg64_range(&GlobalRNG, Low, High);
+  return r;
+}
+uint8_t RandRangeU8(uint8_t Low, uint8_t High)
+{
+  uint8_t r = (uint8_t)pcg64_range(&GlobalRNG, Low, High);
+  return r;
+}
+double RandF64Uni(void)
+{
+  double r = pcg64_nextd(&GlobalRNG);
+  return r;
+}
+double RandF64Range(double low, double high)
+{
+  Assert(low<=high);
+  double d = high-low;
+  double t = RandF64Uni();
+  double r = low + d*t;
+  return r;
+}
+double RandF64Bi(void)
+{
+  double r = RandF64Range(-1.0,1.0);
+  return r;
+}
 #endif //COMMON_H
