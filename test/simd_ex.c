@@ -10,15 +10,33 @@ struct alignas(16) vxmm
   union
   {
     int8_t   vs8 [16];
-    int16_t  vs16[8];
-    int32_t  vs32[4];
-    int64_t  vs64[2];
+    int16_t  vs16[ 8];
+    int32_t  vs32[ 4];
+    int64_t  vs64[ 2];
     uint8_t  vu8 [16];
-    uint16_t vu16[8];
-    uint32_t vu32[4];
-    uint64_t vu64[2];
-    float    vf32[4];
-    double   vf64[2];
+    uint16_t vu16[ 8];
+    uint32_t vu32[ 4];
+    uint64_t vu64[ 2];
+    float    vf32[ 4];
+    double   vf64[ 2];
+  };
+};
+
+typedef struct vymm vymm;
+struct alignas(32) vymm
+{
+  union
+  {
+    int8_t   vs8 [32];
+    int16_t  vs16[16];
+    int32_t  vs32[ 8];
+    int64_t  vs64[ 4];
+    uint8_t  vu8 [32];
+    uint16_t vu16[16];
+    uint32_t vu32[ 8];
+    uint64_t vu64[ 4];
+    float    vf32[ 8];
+    double   vf64[ 4];
   };
 };
 
@@ -129,6 +147,16 @@ void Avx_XorU16(){}
 void Avx_SllU16(){}
 void Avx_SrlU16(){}
 void Avx_SraU16(){}
+
+//NOTE(): floating point compares have greater/less than eq and unordered(NAN or illegal values)
+//NOTE(): predicates e.g. OQ, Q tells the processor what to do when it comes accross an unrdered value
+//        detected in one of the operands. O means both operands must not be a NAN/illegal value. Q means
+//        dont raise an exceptions if one is 
+//NOTE(): There are also intrinsics for convererting between data types
+void Avx_CmpF32(){}
+
+
+
 int main(void)
 {
   vxmm a = {0};

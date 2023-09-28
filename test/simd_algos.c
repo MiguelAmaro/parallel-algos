@@ -73,7 +73,8 @@ uint32_t Avx_MeanU8(double *Mean, uint64_t *Sum, const uint8_t *Array, uint64_t 
     // Unpacking Result which is a 16bit element
     // Hi 8bits(PackedZero)  Lo 8Bits(Pixel)
     // 00000000              10101010 <-random example
-    PixelValsU8 = _mm_load_si128((__m128i*)&Array[i]);
+    uint64_t packoffset = 0;
+    PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+packoffset]);
     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
     // It seems like the goals is to load using simd by using the input data size
@@ -88,20 +89,23 @@ uint32_t Avx_MeanU8(double *Mean, uint64_t *Sum, const uint8_t *Array, uint64_t 
     // 
     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsHiU16);
+    packoffset += SimdElmCount;
     
-    PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+16]);
+    PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+packoffset]);
     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsHiU16);
+    packoffset += SimdElmCount;
     
-    PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+32]);
+    PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+packoffset]);
     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsHiU16);
+    packoffset += SimdElmCount;
     
-    PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+48]);
+    PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+packoffset]);
     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
@@ -110,8 +114,10 @@ uint32_t Avx_MeanU8(double *Mean, uint64_t *Sum, const uint8_t *Array, uint64_t 
     // and summing up the groups individualy into a list of sums(8x 16bit sums) then merging the list of sums
     // by promoting size of the sums and and adding them(or collapsing them into a smaller list of wider sums)(4x 32bit sums)
     // then finally collapsing them via additions to the result of a single 64bit sum
-    __m128i PixelSumsLoU32 = _mm_unpacklo_epi8(PixelSumsU16, PackedZero); //Take low 4 of PixelU16
-    __m128i PixelSumsHiU32 = _mm_unpackhi_epi8(PixelSumsU16, PackedZero);
+    __m128i PixelSumsLoU32 = _mm_unpacklo_epi16(PixelSumsU16, PackedZero); //Take low 4 of PixelU16
+    __m128i PixelSumsHiU32 = _mm_unpackhi_epi16(PixelSumsU16, PackedZero);
+    
+    
     PixelSumsU32 = _mm_add_epi32(PixelSumsU32 ,PixelSumsLoU32);
     PixelSumsU32 = _mm_add_epi32(PixelSumsU32 ,PixelSumsHiU32);
   }

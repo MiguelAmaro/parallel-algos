@@ -276,7 +276,7 @@ $pdata$Scalar_MeanU8 DD imagerel $LN11
 	DD	imagerel $LN11+252
 	DD	imagerel $unwind$Scalar_MeanU8
 $pdata$Avx_MeanU8 DD imagerel $LN11
-	DD	imagerel $LN11+908
+	DD	imagerel $LN11+1072
 	DD	imagerel $unwind$Avx_MeanU8
 $pdata$ArrayInit DD imagerel $LN3
 	DD	imagerel $LN3+75
@@ -302,7 +302,7 @@ CONST	SEGMENT
 __real@0000000000000000 DQ 00000000000000000r	; 0
 CONST	ENDS
 _DATA	SEGMENT
-$SG73463 DB	'%d', 0aH, 00H
+$SG73464 DB	'%d', 0aH, 00H
 $SG71206 DB	'work begin signal set.', 0aH, 00H
 $SG71207 DB	'Error setting work queue begin signal.', 0aH, 00H
 $SG71282 DB	'arena capacity is too small for resquested allocation', 00H
@@ -311,24 +311,24 @@ $SG71283 DB	'Invalid Codepath', 00H
 	ORG $+3
 $SG71339 DB	'error', 00H
 	ORG $+2
-$SG73464 DB	0aH, 00H
+$SG73465 DB	0aH, 00H
 	ORG $+2
-$SG73462 DB	'Array[]: ', 0aH, 00H
+$SG73463 DB	'Array[]: ', 0aH, 00H
 	ORG $+5
-$SG73465 DB	'Results for Avx_MeanU8', 0aH, 00H
-$SG73466 DB	'Result[Avx   ]: %s', 0aH, 00H
+$SG73466 DB	'Results for Avx_MeanU8', 0aH, 00H
+$SG73467 DB	'Result[Avx   ]: %s', 0aH, 00H
 	ORG $+4
-$SG73467 DB	'Sum   [Avx   ]: %llu', 0aH, 00H
+$SG73468 DB	'Sum   [Avx   ]: %llu', 0aH, 00H
 	ORG $+2
-$SG73468 DB	'Mean  [Avx   ]: %f', 0aH, 00H
+$SG73469 DB	'Mean  [Avx   ]: %f', 0aH, 00H
 	ORG $+4
-$SG73469 DB	0aH, 'Results for Scalar_MeanU8', 0aH, 00H
+$SG73470 DB	0aH, 'Results for Scalar_MeanU8', 0aH, 00H
 	ORG $+4
-$SG73470 DB	'Result[Scalar]: %s', 0aH, 00H
+$SG73471 DB	'Result[Scalar]: %s', 0aH, 00H
 	ORG $+4
-$SG73471 DB	'Sum   [Scalar]: %llu', 0aH, 00H
+$SG73472 DB	'Sum   [Scalar]: %llu', 0aH, 00H
 	ORG $+2
-$SG73472 DB	'Mean  [Scalar]: %f', 0aH, 00H
+$SG73473 DB	'Mean  [Scalar]: %f', 0aH, 00H
 _DATA	ENDS
 voltbl	SEGMENT
 _volmd	DD	0ffffffffH
@@ -435,7 +435,7 @@ $unwind$ArrayIsValid DD 010e01H
 $unwind$Scalar_MeanU8 DD 011801H
 	DD	06218H
 $unwind$Avx_MeanU8 DD 021b01H
-	DD	019011bH
+	DD	01b011bH
 $unwind$ArrayInit DD 011301H
 	DD	08213H
 $unwind$main DD	021919H
@@ -483,7 +483,7 @@ Array$ = 96
 __$ArrayPad$ = 160
 main	PROC
 
-; 146  : {
+; 152  : {
 
 $LN6:
 	sub	rsp, 184				; 000000b8H
@@ -491,16 +491,16 @@ $LN6:
 	xor	rax, rsp
 	mov	QWORD PTR __$ArrayPad$[rsp], rax
 
-; 147  : #if 0
-; 148  :   RandInit();
-; 149  :   arena Arena = ArenaAlloc(Kilobytes(4000)+ELEM_MAXCOUNT*sizeof(uint8_t));
-; 150  :   printf("Is Aligned? [%#llx] %s\n", (uint64_t)Arena.Base, BooleanAsString(MemoryIsAligned(Arena.Base, 16)));
-; 151  :   uint64_t Count = 64;
-; 152  :   uint8_t *Array = ArenaPushArray(&Arena, Count, uint8_t);
-; 153  :   ArrayInit(Array, Count, gSeed);
-; 154  : #endif
-; 155  :   
-; 156  :   uint8_t Array[] =
+; 153  : #if 0
+; 154  :   RandInit();
+; 155  :   arena Arena = ArenaAlloc(Kilobytes(4000)+ELEM_MAXCOUNT*sizeof(uint8_t));
+; 156  :   printf("Is Aligned? [%#llx] %s\n", (uint64_t)Arena.Base, BooleanAsString(MemoryIsAligned(Arena.Base, 16)));
+; 157  :   uint64_t Count = 64;
+; 158  :   uint8_t *Array = ArenaPushArray(&Arena, Count, uint8_t);
+; 159  :   ArrayInit(Array, Count, gSeed);
+; 160  : #endif
+; 161  :   
+; 162  :   uint8_t Array[] =
 
 	mov	BYTE PTR Array$[rsp], 5
 	mov	BYTE PTR Array$[rsp+1], 224		; 000000e0H
@@ -567,48 +567,48 @@ $LN6:
 	mov	BYTE PTR Array$[rsp+62], 85		; 00000055H
 	mov	BYTE PTR Array$[rsp+63], 35		; 00000023H
 
-; 157  :   {   5, 224, 125, 150, 221, 12, 140, 145, 114, 68, 20, 206,
-; 158  :     203, 186, 27, 225, 38, 213, 90, 6, 66, 118, 143, 25, 6,
-; 159  :     27, 7, 227, 56, 65, 17, 135, 90, 145, 132, 51, 185, 150,
-; 160  :     158, 235, 103, 120, 158, 80, 51, 184, 18, 74, 235, 158,
-; 161  :     182, 60, 108, 157, 206, 153, 76, 176, 16, 152, 20, 128, 85, 35};
-; 162  :   uint64_t Count = ArrayCount(Array);
+; 163  :   {   5, 224, 125, 150, 221, 12, 140, 145, 114, 68, 20, 206,
+; 164  :     203, 186, 27, 225, 38, 213, 90, 6, 66, 118, 143, 25, 6,
+; 165  :     27, 7, 227, 56, 65, 17, 135, 90, 145, 132, 51, 185, 150,
+; 166  :     158, 235, 103, 120, 158, 80, 51, 184, 18, 74, 235, 158,
+; 167  :     182, 60, 108, 157, 206, 153, 76, 176, 16, 152, 20, 128, 85, 35};
+; 168  :   uint64_t Count = ArrayCount(Array);
 
 	mov	QWORD PTR Count$[rsp], 64		; 00000040H
 
-; 163  :   uint32_t ResultA = 0;
+; 169  :   uint32_t ResultA = 0;
 
 	mov	DWORD PTR ResultA$[rsp], 0
 
-; 164  :   uint32_t ResultB = 0;
+; 170  :   uint32_t ResultB = 0;
 
 	mov	DWORD PTR ResultB$[rsp], 0
 
-; 165  :   uint64_t SumA = 0;
+; 171  :   uint64_t SumA = 0;
 
 	mov	QWORD PTR SumA$[rsp], 0
 
-; 166  :   uint64_t SumB = 0;
+; 172  :   uint64_t SumB = 0;
 
 	mov	QWORD PTR SumB$[rsp], 0
 
-; 167  :   double MeanA = 0.0;
+; 173  :   double MeanA = 0.0;
 
 	xorps	xmm0, xmm0
 	movsd	QWORD PTR MeanA$[rsp], xmm0
 
-; 168  :   double MeanB = 0.0;
+; 174  :   double MeanB = 0.0;
 
 	xorps	xmm0, xmm0
 	movsd	QWORD PTR MeanB$[rsp], xmm0
 
-; 169  :   
-; 170  :   printf("Array[]: \n");
+; 175  :   
+; 176  :   printf("Array[]: \n");
 
-	lea	rcx, OFFSET FLAT:$SG73462
+	lea	rcx, OFFSET FLAT:$SG73463
 	call	printf
 
-; 171  :   for(int i=0;i<Count;i++)
+; 177  :   for(int i=0;i<Count;i++)
 
 	mov	DWORD PTR i$1[rsp], 0
 	jmp	SHORT $LN4@main
@@ -621,22 +621,22 @@ $LN4@main:
 	cmp	rax, QWORD PTR Count$[rsp]
 	jae	SHORT $LN3@main
 
-; 172  :   {
-; 173  :     printf("%d\n", Array[i]);
+; 178  :   {
+; 179  :     printf("%d\n", Array[i]);
 
 	movsxd	rax, DWORD PTR i$1[rsp]
 	movzx	eax, BYTE PTR Array$[rsp+rax]
 	mov	edx, eax
-	lea	rcx, OFFSET FLAT:$SG73463
+	lea	rcx, OFFSET FLAT:$SG73464
 	call	printf
 
-; 174  :   }
+; 180  :   }
 
 	jmp	SHORT $LN2@main
 $LN3@main:
 
-; 175  :   
-; 176  :   ResultB = Avx_MeanU8(&MeanB, &SumB, Array, Count);
+; 181  :   
+; 182  :   ResultB = Avx_MeanU8(&MeanB, &SumB, Array, Count);
 
 	mov	r9, QWORD PTR Count$[rsp]
 	lea	r8, QWORD PTR Array$[rsp]
@@ -645,39 +645,39 @@ $LN3@main:
 	call	Avx_MeanU8
 	mov	DWORD PTR ResultB$[rsp], eax
 
-; 177  :   printf("\n");
-
-	lea	rcx, OFFSET FLAT:$SG73464
-	call	printf
-
-; 178  :   printf("Results for Avx_MeanU8\n");
+; 183  :   printf("\n");
 
 	lea	rcx, OFFSET FLAT:$SG73465
 	call	printf
 
-; 179  :   printf("Result[Avx   ]: %s\n", BooleanAsString(ResultB));
+; 184  :   printf("Results for Avx_MeanU8\n");
+
+	lea	rcx, OFFSET FLAT:$SG73466
+	call	printf
+
+; 185  :   printf("Result[Avx   ]: %s\n", BooleanAsString(ResultB));
 
 	mov	ecx, DWORD PTR ResultB$[rsp]
 	call	BooleanAsString
 	mov	rdx, rax
-	lea	rcx, OFFSET FLAT:$SG73466
-	call	printf
-
-; 180  :   printf("Sum   [Avx   ]: %llu\n", SumB);
-
-	mov	rdx, QWORD PTR SumB$[rsp]
 	lea	rcx, OFFSET FLAT:$SG73467
 	call	printf
 
-; 181  :   printf("Mean  [Avx   ]: %f\n", MeanB);
+; 186  :   printf("Sum   [Avx   ]: %llu\n", SumB);
 
-	movsd	xmm1, QWORD PTR MeanB$[rsp]
-	movq	rdx, xmm1
+	mov	rdx, QWORD PTR SumB$[rsp]
 	lea	rcx, OFFSET FLAT:$SG73468
 	call	printf
 
-; 182  :   
-; 183  :   ResultA = Scalar_MeanU8(&MeanA, &SumA, Array, Count);
+; 187  :   printf("Mean  [Avx   ]: %f\n", MeanB);
+
+	movsd	xmm1, QWORD PTR MeanB$[rsp]
+	movq	rdx, xmm1
+	lea	rcx, OFFSET FLAT:$SG73469
+	call	printf
+
+; 188  :   
+; 189  :   ResultA = Scalar_MeanU8(&MeanA, &SumA, Array, Count);
 
 	mov	r9, QWORD PTR Count$[rsp]
 	lea	r8, QWORD PTR Array$[rsp]
@@ -686,39 +686,39 @@ $LN3@main:
 	call	Scalar_MeanU8
 	mov	DWORD PTR ResultA$[rsp], eax
 
-; 184  :   printf("\nResults for Scalar_MeanU8\n");
+; 190  :   printf("\nResults for Scalar_MeanU8\n");
 
-	lea	rcx, OFFSET FLAT:$SG73469
+	lea	rcx, OFFSET FLAT:$SG73470
 	call	printf
 
-; 185  :   printf("Result[Scalar]: %s\n", BooleanAsString(ResultA));
+; 191  :   printf("Result[Scalar]: %s\n", BooleanAsString(ResultA));
 
 	mov	ecx, DWORD PTR ResultA$[rsp]
 	call	BooleanAsString
 	mov	rdx, rax
-	lea	rcx, OFFSET FLAT:$SG73470
-	call	printf
-
-; 186  :   printf("Sum   [Scalar]: %llu\n", SumA);
-
-	mov	rdx, QWORD PTR SumA$[rsp]
 	lea	rcx, OFFSET FLAT:$SG73471
 	call	printf
 
-; 187  :   printf("Mean  [Scalar]: %f\n", MeanA);
+; 192  :   printf("Sum   [Scalar]: %llu\n", SumA);
 
-	movsd	xmm1, QWORD PTR MeanA$[rsp]
-	movq	rdx, xmm1
+	mov	rdx, QWORD PTR SumA$[rsp]
 	lea	rcx, OFFSET FLAT:$SG73472
 	call	printf
 
-; 188  :   
-; 189  :   //ArenaFree(&Arena);
-; 190  :   //TODO(): Make sure that array is initialized correctly
-; 191  :   //TODO(): Make sure that array is aligned
-; 192  :   //TODO(): Make sure that array is checked. something jpeg algos and 
-; 193  :   return;
-; 194  : }
+; 193  :   printf("Mean  [Scalar]: %f\n", MeanA);
+
+	movsd	xmm1, QWORD PTR MeanA$[rsp]
+	movq	rdx, xmm1
+	lea	rcx, OFFSET FLAT:$SG73473
+	call	printf
+
+; 194  :   
+; 195  :   //ArenaFree(&Arena);
+; 196  :   //TODO(): Make sure that array is initialized correctly
+; 197  :   //TODO(): Make sure that array is aligned
+; 198  :   //TODO(): Make sure that array is checked. something jpeg algos and 
+; 199  :   return;
+; 200  : }
 
 	xor	eax, eax
 	mov	rcx, QWORD PTR __$ArrayPad$[rsp]
@@ -738,7 +738,7 @@ Size$ = 88
 Seed$ = 96
 ArrayInit PROC
 
-; 131  : {
+; 137  : {
 
 $LN3:
 	mov	DWORD PTR [rsp+24], r8d
@@ -746,15 +746,15 @@ $LN3:
 	mov	QWORD PTR [rsp+8], rcx
 	sub	rsp, 72					; 00000048H
 
-; 132  :   int32_t RngMinVal = 5;
+; 138  :   int32_t RngMinVal = 5;
 
 	mov	DWORD PTR RngMinVal$[rsp], 5
 
-; 133  :   int32_t RngMaxVal = 250;
+; 139  :   int32_t RngMaxVal = 250;
 
 	mov	DWORD PTR RngMaxVal$[rsp], 250		; 000000faH
 
-; 134  :   FillArrayU8(Array, Size, RngMinVal, RngMaxVal, Seed);
+; 140  :   FillArrayU8(Array, Size, RngMinVal, RngMaxVal, Seed);
 
 	mov	eax, DWORD PTR Seed$[rsp]
 	mov	DWORD PTR [rsp+32], eax
@@ -764,16 +764,16 @@ $LN3:
 	mov	rcx, QWORD PTR Array$[rsp]
 	call	FillArrayU8
 
-; 135  : #if 0
-; 136  :   Array[(Count/4)*3 + 1] = 2;
-; 137  :   Array[(Count/4)+11] = 3;
-; 138  :   Array[(Count/2)] = 252;
-; 139  :   Array[(Count/2) + 13] = 253;
-; 140  :   Array[(Count/8) + 5] = 253;
-; 141  :   Array[(Count/8) + 7] = 254;
-; 142  : #endif
-; 143  :   return;
-; 144  : }
+; 141  : #if 0
+; 142  :   Array[(Count/4)*3 + 1] = 2;
+; 143  :   Array[(Count/4)+11] = 3;
+; 144  :   Array[(Count/2)] = 252;
+; 145  :   Array[(Count/2) + 13] = 253;
+; 146  :   Array[(Count/8) + 5] = 253;
+; 147  :   Array[(Count/8) + 7] = 254;
+; 148  : #endif
+; 149  :   return;
+; 150  : }
 
 	add	rsp, 72					; 00000048H
 	ret	0
@@ -782,21 +782,22 @@ _TEXT	ENDS
 ; Function compile flags: /Odtp
 ; File F:\Dev\parallel-algos\test\simd_algos.c
 _TEXT	SEGMENT
-PixelSumsU16$1 = 32
-PixelSum$ = 48
-i$2 = 56
-PixelValsU8$3 = 64
-PackedZero$ = 80
-PixelSumsU32$ = 96
-PixelValsLoU16$4 = 112
-PixelValsHiU16$5 = 128
-SimdElmCount$ = 144
-PixelSumsLoU32$6 = 160
-PixelSumsHiU32$7 = 176
-Mean$ = 208
-Sum$ = 216
-Array$ = 224
-Count$ = 232
+packoffset$1 = 32
+PixelSumsU16$2 = 48
+PixelSum$ = 64
+i$3 = 72
+PixelValsU8$4 = 80
+PackedZero$ = 96
+SimdElmCount$ = 112
+PixelSumsU32$ = 128
+PixelValsLoU16$5 = 144
+PixelValsHiU16$6 = 160
+PixelSumsLoU32$7 = 176
+PixelSumsHiU32$8 = 192
+Mean$ = 224
+Sum$ = 232
+Array$ = 240
+Count$ = 248
 Avx_MeanU8 PROC
 
 ; 61   : {
@@ -806,7 +807,7 @@ $LN11:
 	mov	QWORD PTR [rsp+24], r8
 	mov	QWORD PTR [rsp+16], rdx
 	mov	QWORD PTR [rsp+8], rcx
-	sub	rsp, 200				; 000000c8H
+	sub	rsp, 216				; 000000d8H
 
 ; 62   :   if(!ArrayIsValid(Array, Count)) return SIMDTEST_FALSE;
 
@@ -836,16 +837,16 @@ $LN5@Avx_MeanU8:
 
 ; 67   :   for(uint64_t i=0;i<Count; i+=SimdElmCount*4)
 
-	mov	QWORD PTR i$2[rsp], 0
+	mov	QWORD PTR i$3[rsp], 0
 	jmp	SHORT $LN4@Avx_MeanU8
 $LN2@Avx_MeanU8:
-	mov	rax, QWORD PTR i$2[rsp]
+	mov	rax, QWORD PTR i$3[rsp]
 	mov	rcx, QWORD PTR SimdElmCount$[rsp]
 	lea	rax, QWORD PTR [rax+rcx*4]
-	mov	QWORD PTR i$2[rsp], rax
+	mov	QWORD PTR i$3[rsp], rax
 $LN4@Avx_MeanU8:
 	mov	rax, QWORD PTR Count$[rsp]
-	cmp	QWORD PTR i$2[rsp], rax
+	cmp	QWORD PTR i$3[rsp], rax
 	jae	$LN3@Avx_MeanU8
 
 ; 68   :   {
@@ -855,198 +856,243 @@ $LN4@Avx_MeanU8:
 ; 72   :     __m128i PixelSumsU16 = _mm_setzero_si128();
 
 	pxor	xmm0, xmm0
-	movdqa	XMMWORD PTR PixelSumsU16$1[rsp], xmm0
+	movdqa	XMMWORD PTR PixelSumsU16$2[rsp], xmm0
 
 ; 73   :     // Unpacking Result which is a 16bit element
 ; 74   :     // Hi 8bits(PackedZero)  Lo 8Bits(Pixel)
 ; 75   :     // 00000000              10101010 <-random example
-; 76   :     PixelValsU8 = _mm_load_si128((__m128i*)&Array[i]);
+; 76   :     uint64_t packoffset = 0;
 
-	mov	rax, QWORD PTR i$2[rsp]
+	mov	QWORD PTR packoffset$1[rsp], 0
+
+; 77   :     PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+packoffset]);
+
+	mov	rax, QWORD PTR packoffset$1[rsp]
+	mov	rcx, QWORD PTR i$3[rsp]
+	add	rcx, rax
+	mov	rax, rcx
 	mov	rcx, QWORD PTR Array$[rsp]
 	add	rcx, rax
 	mov	rax, rcx
 	movdqu	xmm0, XMMWORD PTR [rax]
-	movdqa	XMMWORD PTR PixelValsU8$3[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsU8$4[rsp], xmm0
 
-; 77   :     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
+; 78   :     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
 
-	movdqa	xmm0, XMMWORD PTR PixelValsU8$3[rsp]
+	movdqa	xmm0, XMMWORD PTR PixelValsU8$4[rsp]
 	punpcklbw xmm0, XMMWORD PTR PackedZero$[rsp]
-	movdqa	XMMWORD PTR PixelValsLoU16$4[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsLoU16$5[rsp], xmm0
 
-; 78   :     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
+; 79   :     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
 
-	movdqa	xmm0, XMMWORD PTR PixelValsU8$3[rsp]
+	movdqa	xmm0, XMMWORD PTR PixelValsU8$4[rsp]
 	punpckhbw xmm0, XMMWORD PTR PackedZero$[rsp]
-	movdqa	XMMWORD PTR PixelValsHiU16$5[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsHiU16$6[rsp], xmm0
 
-; 79   :     // It seems like the goals is to load using simd by using the input data size
-; 80   :     // and using unpacking opperations to promote the size of the opperands.
-; 81   :     // the size that we are using for operations must give rooom for the maximum
-; 82   :     // result that can possible be computed from the data set and our operations.
-; 83   :     // we need enough bits to represent the result.
-; 84   :     // the result in this case is summ and it is divided int to 8 16bit elements
-; 85   :     // in other words we are doing 8 sums at the same time.
-; 86   :     // also taking on smaller chunks at a time lets us use more lanes
-; 87   :     // which can then be merged into fewer but wider lanes via unpacking
-; 88   :     // 
-; 89   :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
+; 80   :     // It seems like the goals is to load using simd by using the input data size
+; 81   :     // and using unpacking opperations to promote the size of the opperands.
+; 82   :     // the size that we are using for operations must give rooom for the maximum
+; 83   :     // result that can possible be computed from the data set and our operations.
+; 84   :     // we need enough bits to represent the result.
+; 85   :     // the result in this case is summ and it is divided int to 8 16bit elements
+; 86   :     // in other words we are doing 8 sums at the same time.
+; 87   :     // also taking on smaller chunks at a time lets us use more lanes
+; 88   :     // which can then be merged into fewer but wider lanes via unpacking
+; 89   :     // 
+; 90   :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
 
-	movdqa	xmm0, XMMWORD PTR PixelSumsU16$1[rsp]
-	paddw	xmm0, XMMWORD PTR PixelValsLoU16$4[rsp]
-	movdqa	XMMWORD PTR PixelSumsU16$1[rsp], xmm0
+	movdqa	xmm0, XMMWORD PTR PixelSumsU16$2[rsp]
+	paddw	xmm0, XMMWORD PTR PixelValsLoU16$5[rsp]
+	movdqa	XMMWORD PTR PixelSumsU16$2[rsp], xmm0
 
-; 90   :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsHiU16);
+; 91   :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsHiU16);
 
-	movdqa	xmm0, XMMWORD PTR PixelSumsU16$1[rsp]
-	paddw	xmm0, XMMWORD PTR PixelValsHiU16$5[rsp]
-	movdqa	XMMWORD PTR PixelSumsU16$1[rsp], xmm0
+	movdqa	xmm0, XMMWORD PTR PixelSumsU16$2[rsp]
+	paddw	xmm0, XMMWORD PTR PixelValsHiU16$6[rsp]
+	movdqa	XMMWORD PTR PixelSumsU16$2[rsp], xmm0
 
-; 91   :     
-; 92   :     PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+16]);
+; 92   :     packoffset += SimdElmCount;
 
-	mov	rax, QWORD PTR Array$[rsp]
-	mov	rcx, QWORD PTR i$2[rsp]
-	lea	rax, QWORD PTR [rax+rcx+16]
+	mov	rax, QWORD PTR SimdElmCount$[rsp]
+	mov	rcx, QWORD PTR packoffset$1[rsp]
+	add	rcx, rax
+	mov	rax, rcx
+	mov	QWORD PTR packoffset$1[rsp], rax
+
+; 93   :     
+; 94   :     PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+packoffset]);
+
+	mov	rax, QWORD PTR packoffset$1[rsp]
+	mov	rcx, QWORD PTR i$3[rsp]
+	add	rcx, rax
+	mov	rax, rcx
+	mov	rcx, QWORD PTR Array$[rsp]
+	add	rcx, rax
+	mov	rax, rcx
 	movdqu	xmm0, XMMWORD PTR [rax]
-	movdqa	XMMWORD PTR PixelValsU8$3[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsU8$4[rsp], xmm0
 
-; 93   :     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
+; 95   :     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
 
-	movdqa	xmm0, XMMWORD PTR PixelValsU8$3[rsp]
+	movdqa	xmm0, XMMWORD PTR PixelValsU8$4[rsp]
 	punpcklbw xmm0, XMMWORD PTR PackedZero$[rsp]
-	movdqa	XMMWORD PTR PixelValsLoU16$4[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsLoU16$5[rsp], xmm0
 
-; 94   :     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
+; 96   :     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
 
-	movdqa	xmm0, XMMWORD PTR PixelValsU8$3[rsp]
+	movdqa	xmm0, XMMWORD PTR PixelValsU8$4[rsp]
 	punpckhbw xmm0, XMMWORD PTR PackedZero$[rsp]
-	movdqa	XMMWORD PTR PixelValsHiU16$5[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsHiU16$6[rsp], xmm0
 
-; 95   :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
+; 97   :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
 
-	movdqa	xmm0, XMMWORD PTR PixelSumsU16$1[rsp]
-	paddw	xmm0, XMMWORD PTR PixelValsLoU16$4[rsp]
-	movdqa	XMMWORD PTR PixelSumsU16$1[rsp], xmm0
+	movdqa	xmm0, XMMWORD PTR PixelSumsU16$2[rsp]
+	paddw	xmm0, XMMWORD PTR PixelValsLoU16$5[rsp]
+	movdqa	XMMWORD PTR PixelSumsU16$2[rsp], xmm0
 
-; 96   :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsHiU16);
+; 98   :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsHiU16);
 
-	movdqa	xmm0, XMMWORD PTR PixelSumsU16$1[rsp]
-	paddw	xmm0, XMMWORD PTR PixelValsHiU16$5[rsp]
-	movdqa	XMMWORD PTR PixelSumsU16$1[rsp], xmm0
+	movdqa	xmm0, XMMWORD PTR PixelSumsU16$2[rsp]
+	paddw	xmm0, XMMWORD PTR PixelValsHiU16$6[rsp]
+	movdqa	XMMWORD PTR PixelSumsU16$2[rsp], xmm0
 
-; 97   :     
-; 98   :     PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+32]);
+; 99   :     packoffset += SimdElmCount;
 
-	mov	rax, QWORD PTR Array$[rsp]
-	mov	rcx, QWORD PTR i$2[rsp]
-	lea	rax, QWORD PTR [rax+rcx+32]
+	mov	rax, QWORD PTR SimdElmCount$[rsp]
+	mov	rcx, QWORD PTR packoffset$1[rsp]
+	add	rcx, rax
+	mov	rax, rcx
+	mov	QWORD PTR packoffset$1[rsp], rax
+
+; 100  :     
+; 101  :     PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+packoffset]);
+
+	mov	rax, QWORD PTR packoffset$1[rsp]
+	mov	rcx, QWORD PTR i$3[rsp]
+	add	rcx, rax
+	mov	rax, rcx
+	mov	rcx, QWORD PTR Array$[rsp]
+	add	rcx, rax
+	mov	rax, rcx
 	movdqu	xmm0, XMMWORD PTR [rax]
-	movdqa	XMMWORD PTR PixelValsU8$3[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsU8$4[rsp], xmm0
 
-; 99   :     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
+; 102  :     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
 
-	movdqa	xmm0, XMMWORD PTR PixelValsU8$3[rsp]
+	movdqa	xmm0, XMMWORD PTR PixelValsU8$4[rsp]
 	punpcklbw xmm0, XMMWORD PTR PackedZero$[rsp]
-	movdqa	XMMWORD PTR PixelValsLoU16$4[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsLoU16$5[rsp], xmm0
 
-; 100  :     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
+; 103  :     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
 
-	movdqa	xmm0, XMMWORD PTR PixelValsU8$3[rsp]
+	movdqa	xmm0, XMMWORD PTR PixelValsU8$4[rsp]
 	punpckhbw xmm0, XMMWORD PTR PackedZero$[rsp]
-	movdqa	XMMWORD PTR PixelValsHiU16$5[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsHiU16$6[rsp], xmm0
 
-; 101  :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
+; 104  :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
 
-	movdqa	xmm0, XMMWORD PTR PixelSumsU16$1[rsp]
-	paddw	xmm0, XMMWORD PTR PixelValsLoU16$4[rsp]
-	movdqa	XMMWORD PTR PixelSumsU16$1[rsp], xmm0
+	movdqa	xmm0, XMMWORD PTR PixelSumsU16$2[rsp]
+	paddw	xmm0, XMMWORD PTR PixelValsLoU16$5[rsp]
+	movdqa	XMMWORD PTR PixelSumsU16$2[rsp], xmm0
 
-; 102  :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsHiU16);
+; 105  :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsHiU16);
 
-	movdqa	xmm0, XMMWORD PTR PixelSumsU16$1[rsp]
-	paddw	xmm0, XMMWORD PTR PixelValsHiU16$5[rsp]
-	movdqa	XMMWORD PTR PixelSumsU16$1[rsp], xmm0
+	movdqa	xmm0, XMMWORD PTR PixelSumsU16$2[rsp]
+	paddw	xmm0, XMMWORD PTR PixelValsHiU16$6[rsp]
+	movdqa	XMMWORD PTR PixelSumsU16$2[rsp], xmm0
 
-; 103  :     
-; 104  :     PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+48]);
+; 106  :     packoffset += SimdElmCount;
 
-	mov	rax, QWORD PTR Array$[rsp]
-	mov	rcx, QWORD PTR i$2[rsp]
-	lea	rax, QWORD PTR [rax+rcx+48]
+	mov	rax, QWORD PTR SimdElmCount$[rsp]
+	mov	rcx, QWORD PTR packoffset$1[rsp]
+	add	rcx, rax
+	mov	rax, rcx
+	mov	QWORD PTR packoffset$1[rsp], rax
+
+; 107  :     
+; 108  :     PixelValsU8 = _mm_load_si128((__m128i*)&Array[i+packoffset]);
+
+	mov	rax, QWORD PTR packoffset$1[rsp]
+	mov	rcx, QWORD PTR i$3[rsp]
+	add	rcx, rax
+	mov	rax, rcx
+	mov	rcx, QWORD PTR Array$[rsp]
+	add	rcx, rax
+	mov	rax, rcx
 	movdqu	xmm0, XMMWORD PTR [rax]
-	movdqa	XMMWORD PTR PixelValsU8$3[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsU8$4[rsp], xmm0
 
-; 105  :     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
+; 109  :     PixelValsLoU16 = _mm_unpacklo_epi8(PixelValsU8, PackedZero);
 
-	movdqa	xmm0, XMMWORD PTR PixelValsU8$3[rsp]
+	movdqa	xmm0, XMMWORD PTR PixelValsU8$4[rsp]
 	punpcklbw xmm0, XMMWORD PTR PackedZero$[rsp]
-	movdqa	XMMWORD PTR PixelValsLoU16$4[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsLoU16$5[rsp], xmm0
 
-; 106  :     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
+; 110  :     PixelValsHiU16 = _mm_unpackhi_epi8(PixelValsU8, PackedZero);
 
-	movdqa	xmm0, XMMWORD PTR PixelValsU8$3[rsp]
+	movdqa	xmm0, XMMWORD PTR PixelValsU8$4[rsp]
 	punpckhbw xmm0, XMMWORD PTR PackedZero$[rsp]
-	movdqa	XMMWORD PTR PixelValsHiU16$5[rsp], xmm0
+	movdqa	XMMWORD PTR PixelValsHiU16$6[rsp], xmm0
 
-; 107  :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
+; 111  :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsLoU16);
 
-	movdqa	xmm0, XMMWORD PTR PixelSumsU16$1[rsp]
-	paddw	xmm0, XMMWORD PTR PixelValsLoU16$4[rsp]
-	movdqa	XMMWORD PTR PixelSumsU16$1[rsp], xmm0
+	movdqa	xmm0, XMMWORD PTR PixelSumsU16$2[rsp]
+	paddw	xmm0, XMMWORD PTR PixelValsLoU16$5[rsp]
+	movdqa	XMMWORD PTR PixelSumsU16$2[rsp], xmm0
 
-; 108  :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsHiU16);
+; 112  :     PixelSumsU16    = _mm_add_epi16(PixelSumsU16, PixelValsHiU16);
 
-	movdqa	xmm0, XMMWORD PTR PixelSumsU16$1[rsp]
-	paddw	xmm0, XMMWORD PTR PixelValsHiU16$5[rsp]
-	movdqa	XMMWORD PTR PixelSumsU16$1[rsp], xmm0
+	movdqa	xmm0, XMMWORD PTR PixelSumsU16$2[rsp]
+	paddw	xmm0, XMMWORD PTR PixelValsHiU16$6[rsp]
+	movdqa	XMMWORD PTR PixelSumsU16$2[rsp], xmm0
 
-; 109  :     // it seems that sumation is done by taking groups from the array promoting the the size
-; 110  :     // and summing up the groups individualy into a list of sums(8x 16bit sums) then merging the list of sums
-; 111  :     // by promoting size of the sums and and adding them(or collapsing them into a smaller list of wider sums)(4x 32bit sums)
-; 112  :     // then finally collapsing them via additions to the result of a single 64bit sum
-; 113  :     __m128i PixelSumsLoU32 = _mm_unpacklo_epi8(PixelSumsU16, PackedZero); //Take low 4 of PixelU16
+; 113  :     // it seems that sumation is done by taking groups from the array promoting the the size
+; 114  :     // and summing up the groups individualy into a list of sums(8x 16bit sums) then merging the list of sums
+; 115  :     // by promoting size of the sums and and adding them(or collapsing them into a smaller list of wider sums)(4x 32bit sums)
+; 116  :     // then finally collapsing them via additions to the result of a single 64bit sum
+; 117  :     __m128i PixelSumsLoU32 = _mm_unpacklo_epi16(PixelSumsU16, PackedZero); //Take low 4 of PixelU16
 
-	movdqa	xmm0, XMMWORD PTR PixelSumsU16$1[rsp]
-	punpcklbw xmm0, XMMWORD PTR PackedZero$[rsp]
-	movdqa	XMMWORD PTR PixelSumsLoU32$6[rsp], xmm0
+	movdqa	xmm0, XMMWORD PTR PixelSumsU16$2[rsp]
+	punpcklwd xmm0, XMMWORD PTR PackedZero$[rsp]
+	movdqa	XMMWORD PTR PixelSumsLoU32$7[rsp], xmm0
 
-; 114  :     __m128i PixelSumsHiU32 = _mm_unpackhi_epi8(PixelSumsU16, PackedZero);
+; 118  :     __m128i PixelSumsHiU32 = _mm_unpackhi_epi16(PixelSumsU16, PackedZero);
 
-	movdqa	xmm0, XMMWORD PTR PixelSumsU16$1[rsp]
-	punpckhbw xmm0, XMMWORD PTR PackedZero$[rsp]
-	movdqa	XMMWORD PTR PixelSumsHiU32$7[rsp], xmm0
+	movdqa	xmm0, XMMWORD PTR PixelSumsU16$2[rsp]
+	punpckhwd xmm0, XMMWORD PTR PackedZero$[rsp]
+	movdqa	XMMWORD PTR PixelSumsHiU32$8[rsp], xmm0
 
-; 115  :     PixelSumsU32 = _mm_add_epi32(PixelSumsU32 ,PixelSumsLoU32);
+; 119  :     
+; 120  :     
+; 121  :     PixelSumsU32 = _mm_add_epi32(PixelSumsU32 ,PixelSumsLoU32);
 
 	movdqa	xmm0, XMMWORD PTR PixelSumsU32$[rsp]
-	paddd	xmm0, XMMWORD PTR PixelSumsLoU32$6[rsp]
+	paddd	xmm0, XMMWORD PTR PixelSumsLoU32$7[rsp]
 	movdqa	XMMWORD PTR PixelSumsU32$[rsp], xmm0
 
-; 116  :     PixelSumsU32 = _mm_add_epi32(PixelSumsU32 ,PixelSumsHiU32);
+; 122  :     PixelSumsU32 = _mm_add_epi32(PixelSumsU32 ,PixelSumsHiU32);
 
 	movdqa	xmm0, XMMWORD PTR PixelSumsU32$[rsp]
-	paddd	xmm0, XMMWORD PTR PixelSumsHiU32$7[rsp]
+	paddd	xmm0, XMMWORD PTR PixelSumsHiU32$8[rsp]
 	movdqa	XMMWORD PTR PixelSumsU32$[rsp], xmm0
 
-; 117  :   }
+; 123  :   }
 
 	jmp	$LN2@Avx_MeanU8
 $LN3@Avx_MeanU8:
 
-; 118  :   
-; 119  :   // extract looks pretty similar to an array access using an index
-; 120  :   // the bit width per element is 32 in this case and the second arg is the index
-; 121  :   // and instead of an array is just i28bit simd register
-; 122  :   uint64_t PixelSum = _mm_extract_epi32(PixelSumsU32, 0);
+; 124  :   
+; 125  :   // extract looks pretty similar to an array access using an index
+; 126  :   // the bit width per element is 32 in this case and the second arg is the index
+; 127  :   // and instead of an array is just i28bit simd register
+; 128  :   uint64_t PixelSum = _mm_extract_epi32(PixelSumsU32, 0);
 
 	movdqa	xmm0, XMMWORD PTR PixelSumsU32$[rsp]
 	pextrd	eax, xmm0, 0
 	cdqe
 	mov	QWORD PTR PixelSum$[rsp], rax
 
-; 123  :   PixelSum += _mm_extract_epi32(PixelSumsU32, 1);
+; 129  :   PixelSum += _mm_extract_epi32(PixelSumsU32, 1);
 
 	movdqa	xmm0, XMMWORD PTR PixelSumsU32$[rsp]
 	pextrd	eax, xmm0, 1
@@ -1056,7 +1102,7 @@ $LN3@Avx_MeanU8:
 	mov	rax, rcx
 	mov	QWORD PTR PixelSum$[rsp], rax
 
-; 124  :   PixelSum += _mm_extract_epi32(PixelSumsU32, 2);
+; 130  :   PixelSum += _mm_extract_epi32(PixelSumsU32, 2);
 
 	movdqa	xmm0, XMMWORD PTR PixelSumsU32$[rsp]
 	pextrd	eax, xmm0, 2
@@ -1066,7 +1112,7 @@ $LN3@Avx_MeanU8:
 	mov	rax, rcx
 	mov	QWORD PTR PixelSum$[rsp], rax
 
-; 125  :   PixelSum += _mm_extract_epi32(PixelSumsU32, 3);
+; 131  :   PixelSum += _mm_extract_epi32(PixelSumsU32, 3);
 
 	movdqa	xmm0, XMMWORD PTR PixelSumsU32$[rsp]
 	pextrd	eax, xmm0, 3
@@ -1076,13 +1122,13 @@ $LN3@Avx_MeanU8:
 	mov	rax, rcx
 	mov	QWORD PTR PixelSum$[rsp], rax
 
-; 126  :   WriteToRef(Sum, PixelSum);
+; 132  :   WriteToRef(Sum, PixelSum);
 
 	mov	rax, QWORD PTR Sum$[rsp]
 	mov	rcx, QWORD PTR PixelSum$[rsp]
 	mov	QWORD PTR [rax], rcx
 
-; 127  :   WriteToRef(Mean, (double)PixelSum/(double)Count);
+; 133  :   WriteToRef(Mean, (double)PixelSum/(double)Count);
 
 	mov	rax, QWORD PTR PixelSum$[rsp]
 	test	rax, rax
@@ -1116,14 +1162,14 @@ $LN8@Avx_MeanU8:
 	mov	rax, QWORD PTR Mean$[rsp]
 	movsd	QWORD PTR [rax], xmm0
 
-; 128  :   return SIMDTEST_TRUE;
+; 134  :   return SIMDTEST_TRUE;
 
 	mov	eax, 1
 $LN1@Avx_MeanU8:
 
-; 129  : }
+; 135  : }
 
-	add	rsp, 200				; 000000c8H
+	add	rsp, 216				; 000000d8H
 	ret	0
 Avx_MeanU8 ENDP
 _TEXT	ENDS
